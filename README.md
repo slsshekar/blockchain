@@ -1,1 +1,3 @@
-# blockchain
+# Blood Donation DApp
+
+This app is built using blockchain to manage and track blood donations...

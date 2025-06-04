@@ -1,0 +1,181 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f8fa;
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+
+h1, h2, h3 {
+  color: #003366;
+}
+
+button {
+  background: #d7263d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(215,38,61,0.08);
+}
+button:hover:not(:disabled) {
+  background: #b71c2a;
+}
+button:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px 12px;
+  margin: 10px 0 18px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border: 1.5px solid #d7263d;
+  outline: none;
+}
+
+.component {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  max-width: 480px;
+  margin: 32px auto;
+  padding: 32px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.component h2, .component h3, .component h4 {
+  margin-top: 0;
+  color: #d7263d;
+  letter-spacing: 0.5px;
+}
+
+.login-component {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.role-selection {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.role-selection button {
+  width: 100%;
+  margin: 10px 0;
+  font-size: 1.2rem;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px; /* space for footer */
+}
+
+footer {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .component, .login-component, .role-selection {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
+
+ul {
+  padding-left: 18px;
+  margin-bottom: 18px;
+}
+li {
+  margin-bottom: 7px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 18px 0;
+}
+
+p, .component p {
+  margin: 8px 0 12px 0;
+}
+
+/* Feedback messages */
+.component p {
+  font-size: 1.04rem;
+}
+.component p[style*="color: red"] {
+  color: #d7263d !important;
+  background: #fff0f2;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+.component p[style*="color: green"] {
+  color: #1b8a3d !important;
+  background: #eafaf1;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+/* Table styling for hospital dashboard */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  background: #fafbfc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+th, td {
+  padding: 10px 8px;
+  text-align: left;
+}
+th {
+  background: #f2f2f2;
+  color: #d7263d;
+  font-weight: 600;
+}
+tr:nth-child(even) {
+  background: #f7f7f7;
+}
