@@ -33,7 +33,9 @@ button:disabled {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"],
+select {
   padding: 10px 12px;
   margin: 10px 0 18px 0;
   border: 1px solid #d1d5db;
@@ -41,6 +43,8 @@ input[type="password"] {
   font-size: 1rem;
   background: #f9fafb;
   transition: border 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 input:focus, select:focus, textarea:focus {
   border: 1.5px solid #d7263d;
@@ -126,9 +130,10 @@ li {
 }
 
 label {
-  font-weight: 500;
-  margin-bottom: 4px;
+  font-weight: 600;
+  margin-bottom: 6px;
   display: block;
+  color: #333;
 }
 
 hr {
@@ -145,6 +150,42 @@ p, .component p {
 .component p {
   font-size: 1.04rem;
 }
+
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.primary-button {
+  background: #d7263d;
+  color: white;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(215,38,61,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.primary-button:hover:not(:disabled) {
+  background: #b71c2a;
+}
+
+.secondary-button {
+  background: #777;
+  color: white;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.secondary-button:hover:not(:disabled) {
+  background: #555;
+}
+
 .component p[style*="color: red"] {
   color: #d7263d !important;
   background: #fff0f2;

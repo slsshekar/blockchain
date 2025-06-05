@@ -85,7 +85,7 @@ function DonorDashboard({ web3, donorManagementContract, bloodBankManagementCont
       {loading && <p>Loading...</p>}
       {status && <p>{status}</p>}
       {profile && !showHistory && (
-        <div>
+        <div className="profile-section">
           <p><strong>Name:</strong> {profile.name}</p>
           <p><strong>Age:</strong> {profile.age}</p>
           <p><strong>Gender:</strong> {profile.gender}</p>
@@ -93,7 +93,7 @@ function DonorDashboard({ web3, donorManagementContract, bloodBankManagementCont
           <p><strong>Blood Group:</strong> {profile.bloodGroup}</p>
           <p><strong>Weight:</strong> {profile.weight}</p>
           <h4>Infection Comments</h4>
-          <ul>
+          <ul className="comments-list">
             {infectionComments.length === 0 && <li>No comments.</li>}
             {infectionComments.map((c, idx) => (
               <li key={idx}>{c}</li>
@@ -102,10 +102,10 @@ function DonorDashboard({ web3, donorManagementContract, bloodBankManagementCont
         </div>
       )}
       {showHistory && (
-        <div>
+        <div className="history-section">
           <h3>Donation History</h3>
           {donationHistory.length === 0 && <p>No donation history available.</p>}
-          <ul>
+          <ul className="history-list">
             {donationHistory.map((don, idx) => (
               <li key={idx}>
                 <p><strong>Donation #{idx + 1}</strong></p>
@@ -116,12 +116,12 @@ function DonorDashboard({ web3, donorManagementContract, bloodBankManagementCont
           </ul>
         </div>
       )}
-      {/* Added Donation History button back as per user request */}
-      <button onClick={handleToggleHistory} style={{ marginRight: "10px" }}>
-        {showHistory ? "View Profile" : "View Donation History"}
-      </button>
-      {/* <button onClick={onGoBack}>Go Back</button> */}
-      <button onClick={onGoBack}>Go Back</button>
+      <div className="button-group">
+        <button onClick={handleToggleHistory} className="primary-button" style={{ marginRight: "10px" }}>
+          {showHistory ? "View Profile" : "View Donation History"}
+        </button>
+        <button onClick={onGoBack} className="secondary-button">Go Back</button>
+      </div>
     </div>
   );
 }

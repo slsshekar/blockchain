@@ -32,8 +32,6 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
       setLoading(true);
       setStatus("");
       try {
-        // Instead of accessing donations(i), try to fetch all donations for this bank
-        // If getAllDonations is not available, explain to the user how to add it
         if (!donationTrackingContract.methods.getAllDonations) {
           setStatus("getAllDonations() is not available in the contract. Please add it for robust dashboard functionality.");
           setLoading(false);
@@ -42,7 +40,6 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
         const allDonations = await donationTrackingContract.methods.getAllDonations().call();
         const filtered = allDonations.filter(d => d.bankId === selectedBank);
         setDonations(filtered);
-        // Fetch donor info for each donation
         let donorInfoMap = {};
         for (const d of filtered) {
           if (!donorInfoMap[d.medicalId]) {
@@ -54,33 +51,31 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
             }
           }
         }
-      setDonorInfo(donorInfoMap);
-    } catch (error) {
-      setStatus("Error fetching donations: " + error.message);
-      setDonations([]);
-      setDonationComments({});
-      setLoading(false);
-      return;
-    }
-
-    // Fetch comments for each donation
-    let commentsMap = {};
-    for (const donation of donations) {
-      try {
-        const comments = await bloodBankManagementContract.methods.getInfectionComments(donation.timestamp).call();
-        commentsMap[donation.timestamp] = comments;
-      } catch {
-        commentsMap[donation.timestamp] = [];
+        setDonorInfo(donorInfoMap);
+      } catch (error) {
+        setStatus("Error fetching donations: " + error.message);
+        setDonations([]);
+        setDonationComments({});
+        setLoading(false);
+        return;
       }
-    }
-    setDonationComments(commentsMap);
 
-    setLoading(false);
-  };
-  fetchDonations();
-}, [donationTrackingContract, bloodBankManagementContract, donorManagementContract, selectedBank]);
+      let commentsMap = {};
+      for (const donation of donations) {
+        try {
+          const comments = await bloodBankManagementContract.methods.getInfectionComments(donation.timestamp).call();
+          commentsMap[donation.timestamp] = comments;
+        } catch {
+          commentsMap[donation.timestamp] = [];
+        }
+      }
+      setDonationComments(commentsMap);
 
-  // Add infection comment to a donation
+      setLoading(false);
+    };
+    fetchDonations();
+  }, [donationTrackingContract, bloodBankManagementContract, donorManagementContract, selectedBank]);
+
   const addComment = async (medicalId, donationIndex) => {
     if (!commentInputs[donationIndex] || !medicalId) return;
     setLoading(true);
@@ -95,7 +90,6 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
     setLoading(false);
   };
 
-  // Record a donation for a donor
   const [recordMedicalId, setRecordMedicalId] = useState("");
   const [recordStatus, setRecordStatus] = useState("");
   const recordDonation = async () => {
@@ -106,7 +100,6 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
     setLoading(true);
     setRecordStatus("");
     try {
-      // Check if donor is registered before recording donation
       const donorExists = await donorManagementContract.methods.donorExists(recordMedicalId).call();
       if (!donorExists) {
         setRecordStatus("Donor is not registered. Cannot record donation.");
@@ -120,21 +113,13 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
       }
       await donationTrackingContract.methods.recordDonation(recordMedicalId, selectedBank).send({ from: accounts[0] });
 
-      // Fetch donor info to get blood group
       const donorInfo = await donorManagementContract.methods.getDonor(recordMedicalId).call();
-      // getDonor returns tuple: (name, age, gender, bloodGroup, weight, donationCount)
-      const bloodGroup = donorInfo[3]; // bloodGroup is 4th element
-
-      console.log("Donor blood group:", bloodGroup);
-      console.log("Selected bank:", selectedBank);
+      const bloodGroup = donorInfo[3];
 
       if (selectedBank && bloodGroup && bloodGroup.trim() !== "") {
-        // Update blood units in BloodBankManagement contract
         try {
-          const receipt = await bloodBankManagementContract.methods.addBloodUnits(selectedBank, bloodGroup, 1).send({ from: accounts[0] });
-          console.log("addBloodUnits transaction receipt:", receipt);
+          await bloodBankManagementContract.methods.addBloodUnits(selectedBank, bloodGroup, 1).send({ from: accounts[0] });
         } catch (err) {
-          console.error("Error calling addBloodUnits:", err);
           throw err;
         }
       }
@@ -142,7 +127,6 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
       setRecordStatus("Donation recorded successfully!");
       setRecordMedicalId("");
     } catch (error) {
-      console.error("Error in recordDonation:", error);
       setRecordStatus("Error recording donation: " + (error.message || JSON.stringify(error)));
     }
     setLoading(false);
@@ -151,33 +135,37 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
   return (
     <div className="component">
       <h2>Blood Bank Dashboard</h2>
-      {/* Remove dropdown if only one bank per account */}
       {bankIds.length > 0 && (
         <div>
           <strong>Bank ID:</strong> {bankIds[0]}
         </div>
       )}
       <hr />
-      {/* Record Donation Form */}
       <h3>Record Donation</h3>
-      <input
-        type="text"
-        placeholder="Donor Medical ID"
-        value={recordMedicalId}
-        onChange={e => setRecordMedicalId(e.target.value)}
-        disabled={loading}
-      />
-      <button onClick={recordDonation} disabled={loading || !recordMedicalId}>
-        Record Donation
-      </button>
+      <div className="form-group">
+        <label htmlFor="recordMedicalId">Donor Medical ID</label>
+        <input
+          id="recordMedicalId"
+          type="text"
+          placeholder="Donor Medical ID"
+          value={recordMedicalId}
+          onChange={e => setRecordMedicalId(e.target.value)}
+          disabled={loading}
+        />
+      </div>
+      <div className="button-group">
+        <button className="primary-button" onClick={recordDonation} disabled={loading || !recordMedicalId}>
+          Record Donation
+        </button>
+      </div>
       {recordStatus && <p>{recordStatus}</p>}
       <hr />
       <h3>Donations at this Bank</h3>
       {loading && <p>Loading donations...</p>}
       {donations.length === 0 && <p>No donations recorded yet.</p>}
-      <ul>
+      <ul className="donation-list">
         {donations.map((don, idx) => (
-          <li key={idx} style={{ marginBottom: "1em", border: "1px solid #eee", borderRadius: 6, padding: 10 }}>
+          <li key={idx} className="donation-item">
             <div><strong>Donor Medical ID:</strong> {don.medicalId}</div>
             <div><strong>Date:</strong> {new Date(Number(don.timestamp) * 1000).toLocaleDateString()}</div>
             {donorInfo[don.medicalId] && (
@@ -193,7 +181,7 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
                 </ul>
               </div>
             )}
-            <div style={{ marginTop: 8 }}>
+            <div className="comment-section">
               <input
                 type="text"
                 placeholder="Add comment..."
@@ -201,9 +189,9 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
                 onChange={e => setCommentInputs({ ...commentInputs, [don.timestamp]: e.target.value })}
                 disabled={loading}
               />
-              <button onClick={() => addComment(don.medicalId, don.timestamp)} disabled={loading || !commentInputs[don.timestamp]}>Add Comment</button>
+              <button className="primary-button" onClick={() => addComment(don.medicalId, don.timestamp)} disabled={loading || !commentInputs[don.timestamp]}>Add Comment</button>
             </div>
-            <div style={{ marginTop: 8 }}>
+            <div className="comments-list">
               <strong>Comments:</strong>
               {donationComments[don.timestamp] && donationComments[don.timestamp].length > 0 ? (
                 <ul>
@@ -219,7 +207,9 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
         ))}
       </ul>
       {status && <p>{status}</p>}
-      <button onClick={onGoBack} style={{ marginTop: "10px" }}>Go Back</button>
+      <div className="button-group" style={{ marginTop: "10px" }}>
+        <button className="secondary-button" onClick={onGoBack}>Go Back</button>
+      </div>
     </div>
   );
 }
