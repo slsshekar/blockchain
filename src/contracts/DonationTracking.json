@@ -1,171 +1,179 @@
 {
   "contractName": "DonationTracking",
   "abi": [
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_donorManagementAddress",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "medicalId",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "bloodBankId",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "DonationRecorded",
-      "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "donations",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "medicalId",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "bloodBankId",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "donorManagement",
-      "outputs": [
-        {
-          "internalType": "contract IDonorManagement",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "donorToDonations",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "medicalId",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "bloodBankId",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "timestamp",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "medicalId",
-          "type": "string"
-        }
-      ],
-      "name": "getDonationsByDonor",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "medicalId",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "bloodBankId",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "timestamp",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct DonationTracking.Donation[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "medicalId",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "bloodBankId",
-          "type": "string"
-        }
-      ],
-      "name": "recordDonation",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ]
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "medicalId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "bankId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "DonationRecorded",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "medicalId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "bankId",
+				"type": "string"
+			}
+		],
+		"name": "recordDonation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "donations",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "medicalId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "bankId",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllDonations",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "medicalId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "bankId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DonationTracking.Donation[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "bankId",
+				"type": "string"
+			}
+		],
+		"name": "getDonationsByBank",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "medicalId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "bankId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DonationTracking.Donation[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "medicalId",
+				"type": "string"
+			}
+		],
+		"name": "getDonationsByDonor",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "medicalId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "bankId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DonationTracking.Donation[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 }
