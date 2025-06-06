@@ -4,9 +4,9 @@ import BloodBankManagementABI from './contracts/BloodBankManagement.json';
 import DonationTrackingABI from './contracts/DonationTracking.json';
 
 // Updated contract addresses from deployment
-const DONOR_MANAGEMENT_ADDRESS = "0xe5263fDf4001520a8A85E4Ca21298dbc45554E9d";
-const BLOOD_BANK_MANAGEMENT_ADDRESS = "0x2500dfF42B91aA04Fbf1ae6aAEeE1db48B64AA24";
-const DONATION_TRACKING_ADDRESS = "0xFfbfAd163A1B68A45Fb1080Ea25d07cCf490f87f";
+const DONOR_MANAGEMENT_ADDRESS = "0x8135966f954Dd5B7a338798fd5dFc5BbB6a913B8";
+const BLOOD_BANK_MANAGEMENT_ADDRESS = "0x6b8fcc81778F62CCCd4A169d1eBaa1e4d6C38274";
+const DONATION_TRACKING_ADDRESS = "0xa9617baD34CFB199f2C3A2B6B26C2fD12eD538a8";
 
 let web3Instance = null;
 let ethRequestAccountsPromise = null;

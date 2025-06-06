@@ -1,5 +1,34 @@
 import React, { useState, useEffect } from "react";
 
+const backgroundStyle = {
+  backgroundImage: 'url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80")',
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  zIndex: -1,
+};
+
+const overlayStyle = {
+  position: "fixed",
+  top: 120,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  backgroundColor: "rgba(255, 255, 255, 0.6)",
+  zIndex: 0,
+};
+
+const contentStyle = {
+  position: "relative",
+  zIndex: 1,
+  padding: "20px",
+};
+
 function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackingContract, donorManagementContract, accounts, onGoBack }) {
   const [bankIds, setBankIds] = useState([]);
   const [selectedBank, setSelectedBank] = useState("");
@@ -133,84 +162,88 @@ function BloodBankDashboard({ web3, bloodBankManagementContract, donationTrackin
   };
 
   return (
-    <div className="component">
-      <h2>Blood Bank Dashboard</h2>
-      {bankIds.length > 0 && (
-        <div>
-          <strong>Bank ID:</strong> {bankIds[0]}
+    <>
+      <div style={backgroundStyle}></div>
+      <div style={overlayStyle}></div>
+      <div className="component" style={contentStyle}>
+        <h2>Blood Bank Dashboard</h2>
+        {bankIds.length > 0 && (
+          <div>
+            <strong>Bank ID:</strong> {bankIds[0]}
+          </div>
+        )}
+        <hr />
+        <h3>Record Donation</h3>
+        <div className="form-group">
+          <label htmlFor="recordMedicalId">Donor Medical ID</label>
+          <input
+            id="recordMedicalId"
+            type="text"
+            placeholder="Donor Medical ID"
+            value={recordMedicalId}
+            onChange={e => setRecordMedicalId(e.target.value)}
+            disabled={loading}
+          />
         </div>
-      )}
-      <hr />
-      <h3>Record Donation</h3>
-      <div className="form-group">
-        <label htmlFor="recordMedicalId">Donor Medical ID</label>
-        <input
-          id="recordMedicalId"
-          type="text"
-          placeholder="Donor Medical ID"
-          value={recordMedicalId}
-          onChange={e => setRecordMedicalId(e.target.value)}
-          disabled={loading}
-        />
-      </div>
-      <div className="button-group">
-        <button className="primary-button" onClick={recordDonation} disabled={loading || !recordMedicalId}>
-          Record Donation
-        </button>
-      </div>
-      {recordStatus && <p>{recordStatus}</p>}
-      <hr />
-      <h3>Donations at this Bank</h3>
-      {loading && <p>Loading donations...</p>}
-      {donations.length === 0 && <p>No donations recorded yet.</p>}
-      <ul className="donation-list">
-        {donations.map((don, idx) => (
-          <li key={idx} className="donation-item">
-            <div><strong>Donor Medical ID:</strong> {don.medicalId}</div>
-            <div><strong>Date:</strong> {new Date(Number(don.timestamp) * 1000).toLocaleDateString()}</div>
-            {donorInfo[don.medicalId] && (
-              <div>
-                <strong>Donor Info:</strong>
-                <ul>
-                  <li>Name: {donorInfo[don.medicalId][0]}</li>
-                  <li>Age: {donorInfo[don.medicalId][1]}</li>
-                  <li>Gender: {donorInfo[don.medicalId][2]}</li>
-                  <li>Blood Group: {donorInfo[don.medicalId][3]}</li>
-                  <li>Weight: {donorInfo[don.medicalId][4]}</li>
-                  <li>Donation Count: {donorInfo[don.medicalId][5]}</li>
-                </ul>
-              </div>
-            )}
-            <div className="comment-section">
-              <input
-                type="text"
-                placeholder="Add comment..."
-                value={commentInputs[don.timestamp] || ""}
-                onChange={e => setCommentInputs({ ...commentInputs, [don.timestamp]: e.target.value })}
-                disabled={loading}
-              />
-              <button className="primary-button" onClick={() => addComment(don.medicalId, don.timestamp)} disabled={loading || !commentInputs[don.timestamp]}>Add Comment</button>
-            </div>
-            <div className="comments-list">
-              <strong>Comments:</strong>
-              {donationComments[don.timestamp] && donationComments[don.timestamp].length > 0 ? (
-                <ul>
-                  {donationComments[don.timestamp].map((comment, idx) => (
-                    <li key={idx}>{comment}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No comments.</p>
+        <div className="button-group">
+          <button className="primary-button" onClick={recordDonation} disabled={loading || !recordMedicalId}>
+            Record Donation
+          </button>
+        </div>
+        {recordStatus && <p>{recordStatus}</p>}
+        <hr />
+        <h3>Donations at this Bank</h3>
+        {loading && <p>Loading donations...</p>}
+        {donations.length === 0 && <p>No donations recorded yet.</p>}
+        <ul className="donation-list">
+          {donations.map((don, idx) => (
+            <li key={idx} className="donation-item">
+              <div><strong>Donor Medical ID:</strong> {don.medicalId}</div>
+              <div><strong>Date:</strong> {new Date(Number(don.timestamp) * 1000).toLocaleDateString()}</div>
+              {donorInfo[don.medicalId] && (
+                <div>
+                  <strong>Donor Info:</strong>
+                  <ul>
+                    <li>Name: {donorInfo[don.medicalId][0]}</li>
+                    <li>Age: {donorInfo[don.medicalId][1]}</li>
+                    <li>Gender: {donorInfo[don.medicalId][2]}</li>
+                    <li>Blood Group: {donorInfo[don.medicalId][3]}</li>
+                    <li>Weight: {donorInfo[don.medicalId][4]}</li>
+                    <li>Donation Count: {donorInfo[don.medicalId][5]}</li>
+                  </ul>
+                </div>
               )}
-            </div>
-          </li>
-        ))}
-      </ul>
-      {status && <p>{status}</p>}
-      <div className="button-group" style={{ marginTop: "10px" }}>
-        <button className="secondary-button" onClick={onGoBack}>Go Back</button>
+              <div className="comment-section">
+                <input
+                  type="text"
+                  placeholder="Add comment..."
+                  value={commentInputs[don.timestamp] || ""}
+                  onChange={e => setCommentInputs({ ...commentInputs, [don.timestamp]: e.target.value })}
+                  disabled={loading}
+                />
+                <button className="primary-button" onClick={() => addComment(don.medicalId, don.timestamp)} disabled={loading || !commentInputs[don.timestamp]}>Add Comment</button>
+              </div>
+              <div className="comments-list">
+                <strong>Comments:</strong>
+                {donationComments[don.timestamp] && donationComments[don.timestamp].length > 0 ? (
+                  <ul>
+                    {donationComments[don.timestamp].map((comment, idx) => (
+                      <li key={idx}>{comment}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No comments.</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        {status && <p>{status}</p>}
+        <div className="button-group" style={{ marginTop: "10px" }}>
+          <button className="secondary-button" onClick={onGoBack}>Go Back</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
